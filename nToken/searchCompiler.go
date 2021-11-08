@@ -8,6 +8,15 @@ import (
 	"strconv"
 )
 
+/**
+ * search key compiler
+ * calling stack:
+ *  - LexicalAnalyzer()
+ *  - SyntaxDirectedTranslator()
+ *      |- tokenStream2Tree()
+ *           |- infixToPrefix()
+ *           |- prefixToParseTree()
+ */
 func Compiler(searchkey string) ([]*ParseTree, error) {
 	token := LexicalAnalyzer(searchkey)
 	var computeTupleTree []*ParseTree
@@ -235,8 +244,6 @@ func tokenStream2Tree(tokenStream []TokenStream) *ParseTree {
 	var treeHead *ParseTree = new(ParseTree)
 	treeHead.Token.Id = -1
 	prefixToParseTree(&tokenStream, 0, len(tokenStream), treeHead)
-
-	//TODO convert to nfa
 
 	return treeHead
 }
