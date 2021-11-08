@@ -1,25 +1,20 @@
 package nToken
 
+/*
+ * Search Queue Token Stream
+ */
 type TokenStream struct {
-
-	Id int
+	Id     int
 	Symbol string
 }
 
-type SymbolTable byte
-
-const (
-	dollerSign 				= '$'
-	percentSign				= '%'
-	verticalBar 			= '|'
-	exclamationMark			= '!'
-	caret					= '^'
-	squareBracketLeft		= '['
-	squareBracketRight		= ']'
-	curlyBracketLeft		= '{'
-	curlyBracketRight		= '}'
-)
-func operatorPriority(in SymbolTable)int{
+/**
+ * convert Symbol to symbol priority
+ * number lower have high priority
+ * @param in input Symbol
+ * @return symbol priority
+ */
+func operatorPriority(in SymbolTable) int {
 	switch in {
 	case squareBracketLeft, squareBracketRight, curlyBracketLeft, curlyBracketRight:
 		return 3
@@ -36,9 +31,34 @@ func operatorPriority(in SymbolTable)int{
 	}
 }
 
-type parseTree struct{
-	token TokenStream
-	left *parseTree
-	right *parseTree
-
+type ParseTree struct {
+	Token TokenStream
+	Left  *ParseTree
+	Right *ParseTree
 }
+
+/**
+ * Symbol List
+ */
+type SymbolTable byte
+
+const (
+	dollerSign         = '$'
+	percentSign        = '%'
+	verticalBar        = '|'
+	exclamationMark    = '!'
+	caret              = '^'
+	squareBracketLeft  = '['
+	squareBracketRight = ']'
+	curlyBracketLeft   = '{'
+	curlyBracketRight  = '}'
+)
+
+type WordAndPartOfSpeechPair struct {
+	Id          int
+	Word        []rune
+	PartOfSeech int
+}
+
+type Sentence []*WordAndPartOfSpeechPair
+type Document []*Sentence
