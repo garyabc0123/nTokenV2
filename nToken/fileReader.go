@@ -10,12 +10,14 @@ import (
 	"strings"
 )
 
+//read seaech queue from file
 func ReadSearchQueue(path string) (string, error) {
 	file, err := os.ReadFile(path)
 	return string(file), err
 
 }
 
+//read data from file and convert to Document
 func ReadData(path string) (Document, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -23,22 +25,20 @@ func ReadData(path string) (Document, error) {
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
-	var stringList []string
+	var stringList []string //readline()
 	for scanner.Scan() {
 		stringList = append(stringList, scanner.Text()) //read line mode
 	}
 
-	var ret Document = make(Document, len(stringList))
-	b1 := goroutines.NewBatch(runtime.NumCPU()*2, goroutines.WithBatchSize(len(stringList)))
-
-	//var token [][]string = make([][]string, len(stringList))
+	var ret Document = make(Document, len(stringList))                                       //return data
+	b1 := goroutines.NewBatch(runtime.NumCPU()*2, goroutines.WithBatchSize(len(stringList))) //work pool
 	for id, _ := range stringList {
-		idx := id
+		idx := id //backup, because id is a variable with is shared by multi-thread.
 
-		b1.Queue(func() (interface{}, error) {
+		b1.Queue(func() (interface{}, error) { //push into work queue
 
 			token := strings.Split(stringList[idx], " ") //split strings by space
-			var id int = 0
+			var idInside int = 0
 			var buf bytes.Buffer
 			tempOutSen := make(Sentence, 0, len(token))
 			for i, _ := range token {
@@ -48,9 +48,9 @@ func ReadData(path string) (Document, error) {
 					if err != nil {
 						return nil, err
 					}
-					tempOutSen = append(tempOutSen, &WordAndPartOfSpeechPair{Id: id, Word: []rune(buf.String()), PartOfSeech: partofspeech})
+					tempOutSen = append(tempOutSen, &WordAndPartOfSpeechPair{Id: idInside, Word: []rune(buf.String()), PartOfSpeech: partofspeech})
 					ret[idx] = &tempOutSen
-					id++
+					idInside++
 					buf.Reset()
 				default:
 					buf.WriteString(token[i])
