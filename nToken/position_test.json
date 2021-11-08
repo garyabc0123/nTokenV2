@@ -1,0 +1,92 @@
+[
+  {
+    "searchKey": "{$1}[1]",
+    "word": {
+      "Id": 0,
+      "Word": "1",
+      "PartOfSpeech": 2
+    },
+    "ans": true
+  },
+  {
+    "searchKey": "{$2}[1]",
+    "word": {
+      "Id": 1,
+      "Word": "2",
+      "PartOfSpeech": 2
+    },
+    "ans": true
+  },
+  {
+    "searchKey": "{%2}[1]",
+    "word": {
+      "Id": 2,
+      "Word": "2",
+      "PartOfSpeech": 2
+    },
+    "ans": true
+  },
+  {
+    "searchKey": "{%2}[1]",
+    "word": {
+      "Id": 3,
+      "Word": "2",
+      "PartOfSpeech": 3
+    },
+    "ans": false
+  },
+  {
+    "searchKey": "{$2^%3}[1]",
+    "word": {
+      "Id": 4,
+      "Word": "2",
+      "PartOfSpeech": 3
+    },
+    "ans": true
+  },
+  {
+    "searchKey": "{$3^%3}[1]",
+    "word": {
+      "Id": 5,
+      "Word": "2",
+      "PartOfSpeech": 3
+    },
+    "ans": false
+  },
+  {
+    "searchKey": "{$2^{!%3}}[1]",
+    "word": {
+      "Id": 6,
+      "Word": "2",
+      "PartOfSpeech": 3
+    },
+    "ans": false
+  },
+  {
+    "searchKey": "{$2^{!%3}}[1]",
+    "word": {
+      "Id": 7,
+      "Word": "2",
+      "PartOfSpeech": 2
+    },
+    "ans": true
+  },
+  {
+    "searchKey": "{{!$2}^{!%3}}[1]",
+    "word": {
+      "Id": 8,
+      "Word": "2",
+      "PartOfSpeech": 2
+    },
+    "ans": false
+  },
+  {
+    "searchKey": "{%2 | %3 | %4 }[1]",
+    "word": {
+      "Id": 9,
+      "Word": "2",
+      "PartOfSpeech": 2
+    },
+    "ans": true
+  }
+]
