@@ -92,4 +92,10 @@ type Document []*Sentence
 //position data struct
 type Position int
 type SentencePositionList []Position
-type DocumentPositionList []Sentence
+type DocumentPositionList []SentencePositionList
+
+type DistList []int
+type PositionArray struct {
+	SentenceID int
+	TokenID    []Position
+}
