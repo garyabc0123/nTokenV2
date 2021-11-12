@@ -28,7 +28,7 @@ func TestTreetraversal(t *testing.T) {
 	}
 
 	for i, row := range testjson.MustArray() {
-		c, _ = Compiler(row.(map[string]interface{})["searchKey"].(string))
+		c, _, _ = Compiler(row.(map[string]interface{})["searchKey"].(string))
 		tempId, _ := row.(map[string]interface{})["word"].(map[string]interface{})["Id"].(json.Number).Int64()
 		tempPoS, _ := row.(map[string]interface{})["word"].(map[string]interface{})["PartOfSpeech"].(json.Number).Int64()
 		ans, err = Treetraversal(c[0], WordAndPartOfSpeechPair{
@@ -42,7 +42,7 @@ func TestTreetraversal(t *testing.T) {
 		if ans != row.(map[string]interface{})["ans"].(bool) {
 			t.Error(i)
 		} else {
-			println(i, " was passed! ")
+			println(i, "was passed! ")
 		}
 	}
 

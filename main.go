@@ -7,22 +7,21 @@ import (
 func main() {
 	//defer profile.Start().Stop()
 
-	{
-
-		temp, err := nToken.ReadData("/mnt/data/go/solr-ckip.dat")
-		if err != nil {
-			panic(err)
-		}
-		println((*(temp[0]))[0].Word)
+	temp, err := nToken.ReadData("solr.dat")
+	if err != nil {
+		panic(err)
 	}
-	{
 
-		computeTupleTree, err := nToken.Compiler("{%1}[0]")
-		if err != nil {
-			panic(err)
-		}
-		i := computeTupleTree[0].Token.Symbol
-		println(i)
+	searchKey, err := nToken.ReadSearchQueue("search.txt")
+	if err != nil {
+		panic(err)
 	}
+	computeTupleTree, distList, err := nToken.Compiler(searchKey)
+	if err != nil {
+		panic(err)
+	}
+	println(distList[0])
+
+	nToken.GetConformPosition(temp, computeTupleTree)
 
 }
