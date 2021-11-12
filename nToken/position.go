@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func GetConformPosition(document Document, tree []*ParseTree) {
+func GetConformPosition(document Document, tree []*ParseTree) []DocumentPositionList {
 	var position []DocumentPositionList = make([]DocumentPositionList, len(tree)) //search keyword pair - sentence id - serial id
 	for i, _ := range tree {
 		position[i] = make(DocumentPositionList, len(document))
@@ -16,9 +16,15 @@ func GetConformPosition(document Document, tree []*ParseTree) {
 	for id, _ := range tree {
 		idx := id
 		batch.Queue(func() (interface{}, error) {
-			//myTree := tree[idx]
-			if idx != 0 {
-				return idx, nil
+			myTree := tree[idx]
+			for ix, _ := range document {
+				for iy, _ := range *(document[ix]) {
+					if b, e := Treetraversal(myTree, *(*((document)[ix]))[iy]); b && e == nil {
+						position[idx][ix] = append(position[idx][ix], Position(iy))
+					} else if e != nil {
+						return nil, e
+					}
+				}
 			}
 
 			return nil, nil
@@ -27,7 +33,20 @@ func GetConformPosition(document Document, tree []*ParseTree) {
 
 	batch.QueueComplete()
 	batch.Close()
+	for pairId := range position {
+		println("ID:", pairId)
 
+		for senId := range position[pairId] {
+			println("\tsentence: ", senId)
+			print("\t\t\t")
+			for i := range position[pairId][senId] {
+				print(position[pairId][senId][i], " ")
+			}
+			println()
+		}
+
+	}
+	return position
 }
 
 func Treetraversal(node *ParseTree, key WordAndPartOfSpeechPair) (bool, error) {
