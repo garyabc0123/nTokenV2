@@ -3,7 +3,6 @@ package nToken
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/emirpasic/gods/stacks/arraystack"
 	"strconv"
 )
@@ -17,11 +16,11 @@ import (
  *           |- infixToPrefix()
  *           |- prefixToParseTree()
  */
-func Compiler(searchkey string) ([]*ParseTree, error) {
+func Compiler(searchkey string) ([]*ParseTree, DistList, error) {
 	token := LexicalAnalyzer(searchkey)
 	var computeTupleTree []*ParseTree
-	err, computeTupleTree := SyntaxDirectedTranslator(token)
-	return computeTupleTree, err
+	err, computeTupleTree, distList := SyntaxDirectedTranslator(token)
+	return computeTupleTree, distList, err
 }
 
 /**
@@ -76,7 +75,7 @@ func LexicalAnalyzer(str string) (ret []TokenStream) {
  * @return error
  * @return a list saving pointer to parse tree root
  */
-func SyntaxDirectedTranslator(tokenStream []TokenStream) (error, []*ParseTree) {
+func SyntaxDirectedTranslator(tokenStream []TokenStream) (error, []*ParseTree, DistList) {
 
 	var nowState int = 0
 	var curlyBegin, curlyEnd int
@@ -88,6 +87,7 @@ func SyntaxDirectedTranslator(tokenStream []TokenStream) (error, []*ParseTree) {
 	//4 - ], reset
 	stack := arraystack.New()
 	var computeTupleTree []*ParseTree
+	var distList DistList
 
 	for it := 0; it < len(tokenStream); it++ {
 		switch nowState {
@@ -116,7 +116,7 @@ func SyntaxDirectedTranslator(tokenStream []TokenStream) (error, []*ParseTree) {
 						nowState++
 					}
 				} else {
-					return errors.New("Synatex Error, loss {"), nil
+					return errors.New("Synatex Error, loss {"), nil, nil
 				}
 			}
 		case 2:
@@ -144,13 +144,14 @@ func SyntaxDirectedTranslator(tokenStream []TokenStream) (error, []*ParseTree) {
 				}
 				dist, err := strconv.Atoi(distStr)
 				if err != nil {
-					return err, nil
+					return err, nil, nil
 				}
-				fmt.Println(curlyBegin, curlyEnd, dist)
+				distList = append(distList, dist)
+				//fmt.Println(curlyBegin, curlyEnd, dist)
 			}
 		}
 	}
-	return nil, computeTupleTree
+	return nil, computeTupleTree, distList
 }
 
 func infixToPrefix(input []TokenStream) (output []TokenStream) {
