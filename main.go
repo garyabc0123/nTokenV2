@@ -22,6 +22,33 @@ func main() {
 	}
 	println(distList[0])
 
-	nToken.GetConformPosition(temp, computeTupleTree)
+	position := nToken.GetConformPosition(temp, computeTupleTree)
+	for i := 0; i < len(position); i++ {
+		print(computeTupleTree[i].Left.Token.Symbol)
+		print("\t")
+	}
+	println()
+	var it int = 0
+	for {
+		var p bool = false
+		for i := 0; i < len(position); i++ {
+			if len(position[i][0]) > it {
+				print(position[i][0][it])
+				print("\t")
+				p = true
+			} else {
+				print("\t")
+			}
+
+		}
+		if !p {
+			break
+		}
+		println()
+		it++
+		if it > 1000 {
+			break
+		}
+	}
 
 }
