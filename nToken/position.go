@@ -33,7 +33,7 @@ func GetConformPosition(document Document, tree []*ParseTree) []DocumentPosition
 
 	batch.QueueComplete()
 	batch.Close()
-	for pairId := range position {
+	/*for pairId := range position {
 		println("ID:", pairId)
 
 		for senId := range position[pairId] {
@@ -45,7 +45,7 @@ func GetConformPosition(document Document, tree []*ParseTree) []DocumentPosition
 			println()
 		}
 
-	}
+	}*/
 	return position
 }
 
